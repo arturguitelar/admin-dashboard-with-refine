@@ -12,6 +12,8 @@ import routerBindings, {
 import { App as AntdApp } from 'antd';
 import { BrowserRouter, Route, Routes } from 'react-router';
 
+import { dataProvider, liveProvider } from './providers';
+
 function App() {
   return (
     <BrowserRouter>
@@ -20,8 +22,8 @@ function App() {
         <AntdApp>
           <DevtoolsProvider>
             <Refine
-              // dataProvider={dataProvider(gqlClient)}
-              // liveProvider={liveProvider(wsClient)}
+              dataProvider={dataProvider}
+              liveProvider={liveProvider}
               notificationProvider={useNotificationProvider}
               routerProvider={routerBindings}
               // authProvider={}
