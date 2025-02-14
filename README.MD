@@ -1,5 +1,9 @@
 # admin-dashboard-with-refine
 
+## This project is a study case (NOT FINISHED YET)
+
+Based on [JavaScript Mastery](https://www.youtube.com/@javascriptmastery) tutorial: [**Build and Deploy a React Admin Dashboard With Real time Data, Charts, Events, Kanban, CRM, and More**](https://www.youtube.com/watch?v=6a3Dz8gwjdg)
+
 <div align="center" style="margin: 30px;">
     <a href="https://refine.dev">
     <img alt="refine logo" src="https://refine.ams3.cdn.digitaloceanspaces.com/readme/refine-readme-banner.png">
