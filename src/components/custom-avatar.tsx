@@ -1,6 +1,5 @@
 import { Avatar as AntdAvatar } from 'antd';
 import { AvatarProps } from 'antd/lib';
-import { r } from 'react-router/dist/development/fog-of-war-CCAcUMgB';
 
 type Props = AvatarProps & {
   name?: string;
