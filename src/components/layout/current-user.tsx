@@ -7,6 +7,7 @@ import type { User } from '@/graphql/schema.types';
 
 import { CustomAvatar } from '../custom-avatar';
 import { Text } from '../text';
+import { AccountSettings } from './account-settings';
 
 export const CurrentUser = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -65,6 +66,14 @@ export const CurrentUser = () => {
           style={{ cursor: 'pointer' }}
         />
       </Popover>
+
+      {user && (
+        <AccountSettings
+          opened={isOpen}
+          setOpened={setIsOpen}
+          userId={user?.id}
+        />
+      )}
     </>
   );
 };
