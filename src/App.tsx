@@ -1,9 +1,4 @@
-import {
-  Authenticated,
-  GitHubBanner,
-  Refine,
-  WelcomePage,
-} from '@refinedev/core';
+import { Authenticated, GitHubBanner, Refine } from '@refinedev/core';
 import { DevtoolsPanel, DevtoolsProvider } from '@refinedev/devtools';
 import { RefineKbar, RefineKbarProvider } from '@refinedev/kbar';
 
@@ -22,6 +17,7 @@ import { authProvider, dataProvider, liveProvider } from './providers';
 
 import { Home, Login, ForgotPassword, Register } from './pages';
 import { Layout } from './components/layout';
+import { resources } from './config/resources';
 
 function App() {
   return (
@@ -36,6 +32,7 @@ function App() {
               notificationProvider={useNotificationProvider}
               routerProvider={routerBindings}
               authProvider={authProvider}
+              resources={resources}
               options={{
                 syncWithLocation: true,
                 warnWhenUnsavedChanges: true,
@@ -45,7 +42,6 @@ function App() {
               }}
             >
               <Routes>
-                {/* <Route index element={<WelcomePage />} /> */}
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
