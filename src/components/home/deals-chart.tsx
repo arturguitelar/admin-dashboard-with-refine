@@ -1,12 +1,62 @@
+import { useMemo } from 'react';
 import { Card } from 'antd';
 import { DollarOutlined } from '@ant-design/icons';
 import { Area, AreaConfig } from '@ant-design/plots';
+import { GetFieldsFromList } from '@refinedev/nestjs-query';
+import { useList } from '@refinedev/core';
 
+import { DASHBOARD_DEALS_CHART_QUERY } from '@/graphql/queries';
+import { DashboardDealsChartQuery } from '@/graphql/types';
+import { mapDealsData } from '@/utilities/helpers';
 import { Text } from '../text';
 
 const DealsChart = () => {
+  const { data } = useList<GetFieldsFromList<DashboardDealsChartQuery>>({
+    resource: 'dealStages',
+    filters: [
+      {
+        field: 'title',
+        operator: 'in',
+        value: ['WON', 'LOST'],
+      },
+    ],
+    meta: {
+      gqlQuery: DASHBOARD_DEALS_CHART_QUERY,
+    },
+  });
+
+  const dealData = useMemo(() => {
+    return mapDealsData(data?.data);
+  }, [data?.data]);
+
   const config: AreaConfig = {
-    data: [],
+    data: dealData,
+    xField: 'timeText',
+    yField: 'value',
+    isStack: false,
+    seriesField: 'state',
+    animation: true,
+    startOnZero: false,
+    smooth: true,
+    legend: {
+      offsetY: -6,
+    },
+    yAxis: {
+      tickCount: 4,
+      label: {
+        formatter: (value) => {
+          return `$${Number(value) / 1000}k`;
+        },
+      },
+    },
+    tooltip: {
+      formatter: (data) => {
+        return {
+          name: data.state,
+          value: `$${Number(data.value) / 1000}k`,
+        };
+      },
+    },
   };
 
   return (
