@@ -1,4 +1,4 @@
-import { Col, Form, Row, Select } from 'antd';
+import { Col, Form, Input, InputNumber, Row, Select } from 'antd';
 import { Edit as EditRefine, useForm, useSelect } from '@refinedev/antd';
 import { GetFieldsFromList } from '@refinedev/nestjs-query';
 
@@ -7,6 +7,11 @@ import { USERS_SELECT_QUERY } from '@/graphql/queries';
 import { UsersSelectQuery } from '@/graphql/types';
 
 import { getNameInitials } from '@/utilities';
+import {
+  businessTypeOptions,
+  companySizeOptions,
+  industryOptions,
+} from '@/constants';
 import { CustomAvatar } from '@/components/custom-avatar';
 import { SelectOptionWithAvatar } from '@/components/select-option-with-avatar';
 
@@ -70,6 +75,35 @@ export const Edit = () => {
                     })) ?? []
                   }
                 />
+              </Form.Item>
+
+              <Form.Item>
+                <Select options={companySizeOptions} />
+              </Form.Item>
+
+              <Form.Item>
+                <InputNumber
+                  autoFocus
+                  addonBefore="$"
+                  min={0}
+                  placeholder="0,00"
+                />
+              </Form.Item>
+
+              <Form.Item label="Industry">
+                <Select options={industryOptions} />
+              </Form.Item>
+
+              <Form.Item label="Business Type">
+                <Select options={businessTypeOptions} />
+              </Form.Item>
+
+              <Form.Item label="Country" name="country">
+                <Input placeholder="Country" />
+              </Form.Item>
+
+              <Form.Item label="Website" name="website">
+                <Input placeholder="Website" />
               </Form.Item>
             </Form>
           </EditRefine>
