@@ -14,6 +14,7 @@ import {
 } from '@/constants';
 import { CustomAvatar } from '@/components/custom-avatar';
 import { SelectOptionWithAvatar } from '@/components/select-option-with-avatar';
+import { CompanyContactsTable } from './contacts-table';
 
 export const Edit = () => {
   const { saveButtonProps, formProps, formLoading, queryResult } = useForm({
@@ -107,6 +108,10 @@ export const Edit = () => {
               </Form.Item>
             </Form>
           </EditRefine>
+        </Col>
+
+        <Col xs={24} xl={12}>
+          <CompanyContactsTable />
         </Col>
       </Row>
     </div>
