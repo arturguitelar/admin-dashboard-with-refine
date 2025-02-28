@@ -22,6 +22,7 @@ import {
   Register,
   CompanyList,
   Create,
+  Edit,
 } from './pages';
 import { Layout } from './components/layout';
 import { resources } from './config/resources';
@@ -67,6 +68,7 @@ function App() {
                   <Route path="/companies">
                     <Route index element={<CompanyList />} />
                     <Route path="new" element={<Create />} />
+                    <Route path="edit/:id" element={<Edit />} />
                   </Route>
                 </Route>
               </Routes>
