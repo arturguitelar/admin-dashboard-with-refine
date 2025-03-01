@@ -18,7 +18,7 @@ import { KanbanColumnSkeleton, ProjectCardSkeleton } from '@/components';
 
 const UNNASIGNED_STAGE_ID = 'unnasigned';
 
-export const TasksList = () => {
+export const TasksList = ({ children }: React.PropsWithChildren) => {
   const { data: stages, isLoading: isLoadingStages } = useList<TaskStage>({
     resource: 'taskStages',
     filters: [
@@ -147,6 +147,7 @@ export const TasksList = () => {
           ))}
         </KanbanBoard>
       </KanbanBoardContainer>
+      {children}
     </>
   );
 };
