@@ -114,6 +114,16 @@ export const TasksList = () => {
               />
             )}
           </KanbanColumn>
+
+          {taskStages.columns?.map((column) => (
+            <KanbanColumn
+              key={column.id}
+              id={column.id}
+              title={column.title}
+              count={column.tasks.length}
+              onAddClick={() => handleAddCard({ stageId: column.id })}
+            ></KanbanColumn>
+          ))}
         </KanbanBoard>
       </KanbanBoardContainer>
     </>
