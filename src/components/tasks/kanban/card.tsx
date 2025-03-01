@@ -5,8 +5,10 @@ import {
   ConfigProvider,
   Dropdown,
   MenuProps,
+  Space,
   Tag,
   theme,
+  Tooltip,
 } from 'antd';
 import {
   ClockCircleOutlined,
@@ -21,6 +23,7 @@ import { getDateColor } from '@/utilities';
 
 import { Text } from '@/components/text';
 import { TextIcon } from '@/components/text-icon';
+import { CustomAvatar } from '@/components/custom-avatar';
 
 type Props = {
   id: string;
@@ -141,6 +144,16 @@ export const ProjectCard = ({ id, title, dueDate, users }: Props) => {
             >
               {dueDateOptions.text}
             </Tag>
+          )}
+
+          {!!users?.length && (
+            <Space>
+              {users.map((user) => (
+                <Tooltip>
+                  <CustomAvatar name={user.name} src={user.avatarUrl} />
+                </Tooltip>
+              ))}
+            </Space>
           )}
         </div>
       </Card>
