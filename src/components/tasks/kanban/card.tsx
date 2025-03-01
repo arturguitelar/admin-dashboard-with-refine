@@ -1,9 +1,25 @@
 import { useMemo } from 'react';
-import { Button, Card, ConfigProvider, Dropdown, MenuProps, theme } from 'antd';
+import {
+  Button,
+  Card,
+  ConfigProvider,
+  Dropdown,
+  MenuProps,
+  Tag,
+  theme,
+} from 'antd';
+import {
+  ClockCircleOutlined,
+  DeleteOutlined,
+  EyeOutlined,
+  MoreOutlined,
+} from '@ant-design/icons';
+import dayjs from 'dayjs';
 
 import { User } from '@/graphql/schema.types';
+import { getDateColor } from '@/utilities';
+
 import { Text } from '@/components/text';
-import { DeleteOutlined, EyeOutlined, MoreOutlined } from '@ant-design/icons';
 import { TextIcon } from '@/components/text-icon';
 
 type Props = {
@@ -44,6 +60,17 @@ export const ProjectCard = ({ id, title, dueDate, users }: Props) => {
 
     return dropDownItems;
   }, []);
+
+  const dueDateOptions = useMemo(() => {
+    if (!dueDate) return null;
+
+    const date = dayjs(dueDate);
+
+    return {
+      color: getDateColor({ date: dueDate }) as string,
+      text: date.format('MMM DD'),
+    };
+  }, [dueDate]);
 
   return (
     <ConfigProvider
@@ -100,7 +127,21 @@ export const ProjectCard = ({ id, title, dueDate, users }: Props) => {
           }}
         >
           <TextIcon style={{ marginRight: '4px' }} />
-          {/* {dueDateOptions} */}
+          {dueDateOptions && (
+            <Tag
+              icon={<ClockCircleOutlined style={{ fontSize: '12px' }} />}
+              style={{
+                padding: '0 4px',
+                marginInlineEnd: '0',
+                backgroundColor:
+                  dueDateOptions.color === 'default' ? 'transparent' : 'unset',
+              }}
+              color={dueDateOptions.color}
+              bordered={dueDateOptions.color !== 'default'}
+            >
+              {dueDateOptions.text}
+            </Tag>
+          )}
         </div>
       </Card>
     </ConfigProvider>
