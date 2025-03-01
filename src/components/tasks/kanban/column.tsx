@@ -1,23 +1,32 @@
-import { useDroppable } from '@dnd-kit/core';
+import { ReactNode } from 'react';
+import { useDroppable, UseDroppableArguments } from '@dnd-kit/core';
 import { Badge, Button, Space } from 'antd';
 
 import { Text } from '@/components/text';
 import { PlusOutlined } from '@ant-design/icons';
 
-export const KanbanColumn = ({ children }: React.PropsWithChildren) => {
-  const { isOver, setNodeRef, active } = useDroppable({
-    id: '',
-    data: '',
-  });
+type Props = {
+  id: string;
+  title: string;
+  description?: ReactNode;
+  count: number;
+  data?: UseDroppableArguments['data'];
+  onAddClick?: (args: { id: string }) => void;
+};
 
-  const count = 2;
-
-  const description = 'Description';
-
-  const title = 'TITLE';
+export const KanbanColumn = ({
+  children,
+  id,
+  title,
+  description,
+  count,
+  data,
+  onAddClick,
+}: React.PropsWithChildren<Props>) => {
+  const { isOver, setNodeRef, active } = useDroppable({ id, data });
 
   const onAddClickHandler = () => {
-    //
+    onAddClick?.({ id });
   };
 
   return (
