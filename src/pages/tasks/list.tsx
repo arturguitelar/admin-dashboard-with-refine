@@ -127,7 +127,23 @@ export const TasksList = () => {
               title={column.title}
               count={column.tasks.length}
               onAddClick={() => handleAddCard({ stageId: column.id })}
-            ></KanbanColumn>
+            >
+              {!isLoading &&
+                column.tasks.map((task) => (
+                  <KanbanItem key={task.id} id={task.id} data={task}>
+                    <ProjectCardMemo
+                      {...task}
+                      dueDate={task.dueDate || undefined}
+                    />
+                  </KanbanItem>
+                ))}
+
+              {!column.tasks.length && (
+                <KanbanAddCardButton
+                  onClick={() => handleAddCard({ stageId: column.id })}
+                />
+              )}
+            </KanbanColumn>
           ))}
         </KanbanBoard>
       </KanbanBoardContainer>
