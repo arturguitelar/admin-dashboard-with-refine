@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import {
   Button,
   Card,
@@ -171,3 +171,15 @@ export const ProjectCard = ({ id, title, dueDate, users }: Props) => {
     </ConfigProvider>
   );
 };
+
+export default ProjectCard;
+
+export const ProjectCardMemo = memo(ProjectCard, (prev, next) => {
+  return (
+    prev.id === next.id &&
+    prev.title === next.title &&
+    prev.dueDate === next.dueDate &&
+    prev.users?.length === next.users?.length &&
+    prev.updateAt === next.updateAt
+  );
+});
