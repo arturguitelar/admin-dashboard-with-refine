@@ -13,6 +13,7 @@ import {
 import { KanbanColumn } from '@/components/tasks/kanban/column';
 import { KanbanItem } from '@/components/tasks/kanban/item';
 import { ProjectCardMemo } from '@/components/tasks/kanban/card';
+import { KanbanAddCardButton } from '@/components/tasks/kanban/add-card-button';
 
 const UNNASIGNED_STAGE_ID = 'unnasigned';
 
@@ -106,6 +107,12 @@ export const TasksList = () => {
                 />
               </KanbanItem>
             ))}
+
+            {!taskStages.unnasignedStage.length && (
+              <KanbanAddCardButton
+                onClick={() => handleAddCard({ stageId: UNNASIGNED_STAGE_ID })}
+              />
+            )}
           </KanbanColumn>
         </KanbanBoard>
       </KanbanBoardContainer>
