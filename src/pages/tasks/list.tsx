@@ -14,6 +14,8 @@ import { KanbanColumn } from '@/components/tasks/kanban/column';
 import { KanbanItem } from '@/components/tasks/kanban/item';
 import { ProjectCardMemo } from '@/components/tasks/kanban/card';
 
+const UNNASIGNED_STAGE_ID = 'unnasigned';
+
 export const TasksList = () => {
   const { data: stages, isLoading: isLoadingStages } = useList<TaskStage>({
     resource: 'taskStages',
@@ -84,10 +86,10 @@ export const TasksList = () => {
       <KanbanBoardContainer>
         <KanbanBoard>
           <KanbanColumn
-            id="unnasigned"
-            title={'unnasigned'}
+            id={UNNASIGNED_STAGE_ID}
+            title={UNNASIGNED_STAGE_ID}
             count={taskStages.unnasignedStage.length || 0}
-            onAddClick={() => handleAddCard({ stageId: 'unnasigned' })}
+            onAddClick={() => handleAddCard({ stageId: UNNASIGNED_STAGE_ID })}
           >
             {taskStages.unnasignedStage.map((task) => (
               <KanbanItem
@@ -95,7 +97,7 @@ export const TasksList = () => {
                 id={task.id}
                 data={{
                   ...task,
-                  stageId: 'unnasigned',
+                  stageId: UNNASIGNED_STAGE_ID,
                 }}
               >
                 <ProjectCardMemo
