@@ -49,6 +49,7 @@ export const KanbanItem = ({
             </div>
           </DragOverlay>
         )}
+        {children}
       </div>
     </div>
   );
