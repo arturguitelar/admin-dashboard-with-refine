@@ -14,6 +14,7 @@ import { KanbanColumn } from '@/components/tasks/kanban/column';
 import { KanbanItem } from '@/components/tasks/kanban/item';
 import { ProjectCardMemo } from '@/components/tasks/kanban/card';
 import { KanbanAddCardButton } from '@/components/tasks/kanban/add-card-button';
+import { KanbanColumnSkeleton, ProjectCardSkeleton } from '@/components';
 
 const UNNASIGNED_STAGE_ID = 'unnasigned';
 
@@ -82,6 +83,10 @@ export const TasksList = () => {
 
   const handleAddCard = (args: { stageId: string }) => {};
 
+  const isLoading = isLoadingStages || isLoadingTasks;
+
+  if (isLoading) return <PageSkeleton />;
+
   return (
     <>
       <KanbanBoardContainer>
@@ -127,5 +132,22 @@ export const TasksList = () => {
         </KanbanBoard>
       </KanbanBoardContainer>
     </>
+  );
+};
+
+const PageSkeleton = () => {
+  const columnCount = 6;
+  const itemCount = 4;
+
+  return (
+    <KanbanBoardContainer>
+      {Array.from({ length: columnCount }).map((_, index) => (
+        <KanbanColumnSkeleton key={index}>
+          {Array.from({ length: itemCount }).map((_, index) => (
+            <ProjectCardSkeleton key={index} />
+          ))}
+        </KanbanColumnSkeleton>
+      ))}
+    </KanbanBoardContainer>
   );
 };
