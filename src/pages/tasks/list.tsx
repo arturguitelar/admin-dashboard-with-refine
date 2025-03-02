@@ -1,8 +1,10 @@
 import { useMemo } from 'react';
-import { useList } from '@refinedev/core';
+import { useList, useUpdate } from '@refinedev/core';
 import { GetFieldsFromList } from '@refinedev/nestjs-query';
+import { DragEndEvent } from '@dnd-kit/core';
 
 import { TASK_STAGES_QUERY, TASKS_QUERY } from '@/graphql/queries';
+import { UPDATE_TASK_STAGE_MUTATION } from '@/graphql/mutations';
 import { TaskStage } from '@/graphql/schema.types';
 import { TasksQuery } from '@/graphql/types';
 
@@ -16,7 +18,7 @@ import { ProjectCardMemo } from '@/components/tasks/kanban/card';
 import { KanbanAddCardButton } from '@/components/tasks/kanban/add-card-button';
 import { KanbanColumnSkeleton, ProjectCardSkeleton } from '@/components';
 
-const UNNASIGNED_STAGE_ID = 'unnasigned';
+const UNASSINED_STAGE_ID = 'unassigned';
 
 export const TasksList = ({ children }: React.PropsWithChildren) => {
   const { data: stages, isLoading: isLoadingStages } = useList<TaskStage>({
@@ -60,15 +62,17 @@ export const TasksList = ({ children }: React.PropsWithChildren) => {
     },
   });
 
+  const { mutate: updateTask } = useUpdate();
+
   const taskStages = useMemo(() => {
     if (!tasks?.data || !stages?.data) {
       return {
-        unnasignedStage: [],
+        unassignedStage: [],
         stages: [],
       };
     }
 
-    const unnasignedStage = tasks.data.filter((task) => task.stageId === null);
+    const unassignedStage = tasks.data.filter((task) => task.stageId === null);
 
     const grouped: TaskStage[] = stages.data.map((stage) => ({
       ...stage,
@@ -76,12 +80,37 @@ export const TasksList = ({ children }: React.PropsWithChildren) => {
     }));
 
     return {
-      unnasignedStage,
+      unassignedStage,
       columns: grouped,
     };
   }, [stages, tasks]);
 
   const handleAddCard = (args: { stageId: string }) => {};
+
+  const handleOnDragEnd = (event: DragEndEvent) => {
+    let stageId = event.over?.id as undefined | string | null;
+    const taskId = event.active.id as string;
+    const taskStageId = event.active.data.current?.stageId;
+
+    if (taskStageId === stageId) return;
+
+    if (stageId === UNASSINED_STAGE_ID) {
+      stageId = null;
+    }
+
+    updateTask({
+      resource: 'tasks',
+      id: taskId,
+      values: {
+        stageId: stageId,
+      },
+      successNotification: false,
+      mutationMode: 'optimistic',
+      meta: {
+        gqlMutation: UPDATE_TASK_STAGE_MUTATION,
+      },
+    });
+  };
 
   const isLoading = isLoadingStages || isLoadingTasks;
 
@@ -90,20 +119,20 @@ export const TasksList = ({ children }: React.PropsWithChildren) => {
   return (
     <>
       <KanbanBoardContainer>
-        <KanbanBoard>
+        <KanbanBoard onDragEnd={handleOnDragEnd}>
           <KanbanColumn
-            id={UNNASIGNED_STAGE_ID}
-            title={UNNASIGNED_STAGE_ID}
-            count={taskStages.unnasignedStage.length || 0}
-            onAddClick={() => handleAddCard({ stageId: UNNASIGNED_STAGE_ID })}
+            id={UNASSINED_STAGE_ID}
+            title={UNASSINED_STAGE_ID}
+            count={taskStages.unassignedStage.length || 0}
+            onAddClick={() => handleAddCard({ stageId: UNASSINED_STAGE_ID })}
           >
-            {taskStages.unnasignedStage.map((task) => (
+            {taskStages.unassignedStage.map((task) => (
               <KanbanItem
                 key={task.id}
                 id={task.id}
                 data={{
                   ...task,
-                  stageId: UNNASIGNED_STAGE_ID,
+                  stageId: UNASSINED_STAGE_ID,
                 }}
               >
                 <ProjectCardMemo
@@ -113,9 +142,9 @@ export const TasksList = ({ children }: React.PropsWithChildren) => {
               </KanbanItem>
             ))}
 
-            {!taskStages.unnasignedStage.length && (
+            {!taskStages.unassignedStage.length && (
               <KanbanAddCardButton
-                onClick={() => handleAddCard({ stageId: UNNASIGNED_STAGE_ID })}
+                onClick={() => handleAddCard({ stageId: UNASSINED_STAGE_ID })}
               />
             )}
           </KanbanColumn>
