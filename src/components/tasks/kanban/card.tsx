@@ -16,6 +16,7 @@ import {
   EyeOutlined,
   MoreOutlined,
 } from '@ant-design/icons';
+import { useDelete, useNavigation } from '@refinedev/core';
 import dayjs from 'dayjs';
 
 import { User } from '@/graphql/schema.types';
@@ -40,7 +41,8 @@ type Props = {
 export const ProjectCard = ({ id, title, dueDate, users }: Props) => {
   const { token } = theme.useToken();
 
-  const edit = () => {};
+  const { edit } = useNavigation();
+  const { mutate: remove } = useDelete();
 
   const dropdownItems = useMemo(() => {
     const dropDownItems: MenuProps['items'] = [
@@ -49,7 +51,7 @@ export const ProjectCard = ({ id, title, dueDate, users }: Props) => {
         key: '1',
         icon: <EyeOutlined />,
         onClick: () => {
-          edit();
+          edit('tasks', id, 'replace');
         },
       },
       {
@@ -57,12 +59,20 @@ export const ProjectCard = ({ id, title, dueDate, users }: Props) => {
         label: 'Delete Card',
         key: '2',
         icon: <DeleteOutlined />,
-        onClick: () => {},
+        onClick: () => {
+          remove({
+            resource: 'tasks',
+            id,
+            meta: {
+              operation: 'task',
+            },
+          });
+        },
       },
     ];
 
     return dropDownItems;
-  }, []);
+  }, [edit, id, remove]);
 
   const dueDateOptions = useMemo(() => {
     if (!dueDate) return null;
@@ -91,7 +101,7 @@ export const ProjectCard = ({ id, title, dueDate, users }: Props) => {
       <Card
         size="small"
         title={<Text ellipsis={{ tooltip: title }}>{title}</Text>}
-        onClick={() => edit()}
+        onClick={() => dropdownItems}
         extra={
           <Dropdown
             trigger={['click']}
