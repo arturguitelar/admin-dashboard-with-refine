@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useList, useUpdate } from '@refinedev/core';
+import { useList, useNavigation, useUpdate } from '@refinedev/core';
 import { GetFieldsFromList } from '@refinedev/nestjs-query';
 import { DragEndEvent } from '@dnd-kit/core';
 
@@ -21,6 +21,8 @@ import { KanbanColumnSkeleton, ProjectCardSkeleton } from '@/components';
 const UNASSINED_STAGE_ID = 'unassigned';
 
 export const TasksList = ({ children }: React.PropsWithChildren) => {
+  const { replace } = useNavigation();
+
   const { data: stages, isLoading: isLoadingStages } = useList<TaskStage>({
     resource: 'taskStages',
     filters: [
@@ -85,7 +87,14 @@ export const TasksList = ({ children }: React.PropsWithChildren) => {
     };
   }, [stages, tasks]);
 
-  const handleAddCard = (args: { stageId: string }) => {};
+  const handleAddCard = (args: { stageId: string }) => {
+    const path =
+      args.stageId === UNASSINED_STAGE_ID
+        ? '/tasks/new'
+        : `/tasks/new?stageId=${args.stageId}`;
+
+    replace(path);
+  };
 
   const handleOnDragEnd = (event: DragEndEvent) => {
     let stageId = event.over?.id as undefined | string | null;
