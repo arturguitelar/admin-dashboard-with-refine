@@ -27,6 +27,8 @@ import {
 } from './pages';
 import { Layout } from './components/layout';
 import { resources } from './config/resources';
+import { CreateTask } from './pages/tasks/create';
+import { EditTask } from './pages/tasks/edit';
 
 function App() {
   return (
@@ -73,8 +75,16 @@ function App() {
                     <Route path="edit/:id" element={<Edit />} />
                   </Route>
 
-                  <Route path="/tasks">
-                    <Route index element={<TasksList />} />
+                  <Route
+                    path="/tasks"
+                    element={
+                      <TasksList>
+                        <Outlet />
+                      </TasksList>
+                    }
+                  >
+                    <Route path="new" element={<CreateTask />} />
+                    <Route path="edit/:id" element={<EditTask />} />
                   </Route>
                 </Route>
               </Routes>
