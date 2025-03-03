@@ -5,8 +5,7 @@ import { DragEndEvent } from '@dnd-kit/core';
 
 import { TASK_STAGES_QUERY, TASKS_QUERY } from '@/graphql/queries';
 import { UPDATE_TASK_STAGE_MUTATION } from '@/graphql/mutations';
-import { TaskStage } from '@/graphql/schema.types';
-import { TasksQuery } from '@/graphql/types';
+import { TasksQuery, TaskStagesQuery } from '@/graphql/types';
 
 import {
   KanbanBoardContainer,
@@ -17,6 +16,9 @@ import { KanbanItem } from '@/components/tasks/kanban/item';
 import { ProjectCardMemo } from '@/components/tasks/kanban/card';
 import { KanbanAddCardButton } from '@/components/tasks/kanban/add-card-button';
 import { KanbanColumnSkeleton, ProjectCardSkeleton } from '@/components';
+
+type Task = GetFieldsFromList<TasksQuery>;
+type TaskStage = GetFieldsFromList<TaskStagesQuery> & { tasks: Task[] };
 
 const UNASSINED_STAGE_ID = 'unassigned';
 
